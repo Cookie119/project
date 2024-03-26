@@ -1,0 +1,2 @@
+class Trusty < ApplicationRecord
+end

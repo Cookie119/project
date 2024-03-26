@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Project</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#317EFB">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "inter-font", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag "tailwind", "inter-font", "application", "data-turbo-track": "reload" %>
+  <link rel="manifest" href="/manifest.json">
+  <%= javascript_importmap_tags %>
+</head>
+<body class="custom-font">
+  <%= yield %>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+<script>
+const vapidPublicKey = new Uint8Array(<%= Base64.urlsafe_decode64(ENV['VAPID_PUBLIC_KEY']).bytes %>);
+
+// When serviceWorker is supported, installed, and activated,
+// subscribe the pushManager property with the vapidPublicKey
+navigator.serviceWorker.ready.then(async (serviceWorkerRegistration) => {
+  serviceWorkerRegistration.pushManager
+    .subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: vapidPublicKey
+    })
+    .then(function(subscription) {
+      // Send subscription data to the server
+      fetch('/subscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(subscription),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log('Subscription data sent successfully:', data);
+        })
+        .catch(error => {
+          console.error('Error sending subscription data:', error);
+        });
+    })
+    .catch(error => {
+      console.error('Error subscribing to pushManager:', error);
+    });
+});
+
+
+</script>
+
+
+
+</body>
+</html>
+
+<style>
+.custom-font {
+    font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+
+<style>
+    .headlines{
+background-color: #117AFF;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%23000' stroke-width='66.7' stroke-opacity='0.05' %3E%3Ccircle fill='%23117AFF' cx='0' cy='0' r='1800'/%3E%3Ccircle fill='%231a73f5' cx='0' cy='0' r='1700'/%3E%3Ccircle fill='%231f6bec' cx='0' cy='0' r='1600'/%3E%3Ccircle fill='%232364e3' cx='0' cy='0' r='1500'/%3E%3Ccircle fill='%23265dd9' cx='0' cy='0' r='1400'/%3E%3Ccircle fill='%232856d0' cx='0' cy='0' r='1300'/%3E%3Ccircle fill='%23294fc6' cx='0' cy='0' r='1200'/%3E%3Ccircle fill='%232a48bd' cx='0' cy='0' r='1100'/%3E%3Ccircle fill='%232a41b4' cx='0' cy='0' r='1000'/%3E%3Ccircle fill='%232a3aab' cx='0' cy='0' r='900'/%3E%3Ccircle fill='%232934a2' cx='0' cy='0' r='800'/%3E%3Ccircle fill='%23282d99' cx='0' cy='0' r='700'/%3E%3Ccircle fill='%23272690' cx='0' cy='0' r='600'/%3E%3Ccircle fill='%23251f87' cx='0' cy='0' r='500'/%3E%3Ccircle fill='%2323187e' cx='0' cy='0' r='400'/%3E%3Ccircle fill='%23211175' cx='0' cy='0' r='300'/%3E%3Ccircle fill='%231f086d' cx='0' cy='0' r='200'/%3E%3Ccircle fill='%231C0164' cx='0' cy='0' r='100'/%3E%3C/g%3E%3C/svg%3E");
+background-attachment: fixed;
+background-size: cover;
+    }
+</style>

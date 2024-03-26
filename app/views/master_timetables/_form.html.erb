@@ -1,0 +1,45 @@
+<%= form_with(model: @master_timetable, class: "contents") do |form| %>
+  <% if @master_timetable.errors.any? %>
+    <div id="error_explanation" class="bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3">
+      <h2><%= pluralize(@master_timetable.errors.count, "error") %> prohibited this master timetable from being saved:</h2>
+
+      <ul>
+        <% @master_timetable.errors.full_messages.each do |error| %>
+          <li><%= error %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="my-5">
+    <%= form.label :subject_id %>
+    <%= form.collection_select :subject_id, Subject.all, :id, :name, { prompt: "Select Subject" }, { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+  </div>
+
+  <div class="my-5">
+    <%= form.label :teacher_id %>
+    <%= form.collection_select :teacher_id, Teacher.all, :id, :name, { prompt: "Select Teacher" }, { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+  </div>
+
+<div class="my-5">
+  <%= form.label :day_id %>
+  <%= form.collection_select :day_id, Day.order(:name), :id, :name, { prompt: "Select Day" }, { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+</div>
+
+
+<div class="my-5">
+  <%= form.label :time_slot_id %>
+  <%= form.collection_select :time_slot_id, TimeSlot.order(:start_time), :id, :display_time_slot, { prompt: "Select Time Slot" }, { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+</div>
+
+
+
+  <div class="my-5">
+    <%= form.label :division_id %>
+    <%= form.collection_select :division_id, Division.all, :id, :division, { prompt: "Select Division" }, { class: "block shadow rounded-md border border-gray-200 outline-none px-3 py-2 mt-2 w-full" } %>
+  </div>
+
+  <div class="inline">
+    <%= form.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer" %>
+  </div>
+<% end %>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google News API Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .article {
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    .article h2 {
+      margin-top: 0;
+    }
+    .article p {
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Latest News</h1>
+  <div id="news"></div>
+</div>
+
+<script>
+  // Function to fetch news from Google News API
+  async function fetchNews() {
+    const apiKey = '7e132df492ac411b9db73bb96eec4d06';
+    const url = `https://newsapi.org/v2/top-headlines?sources=google-news&apiKey=${apiKey}`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.status === 'ok') {
+        const newsContainer = document.getElementById('news');
+        newsContainer.innerHTML = '';
+
+        data.articles.forEach(article => {
+          const articleDiv = document.createElement('div');
+          articleDiv.classList.add('article');
+
+          const title = document.createElement('h2');
+          title.textContent = article.title;
+
+          const description = document.createElement('p');
+          description.textContent = article.description;
+
+          const source = document.createElement('p');
+          source.textContent = `Source: ${article.source.name}`;
+
+          const publishedAt = document.createElement('p');
+          publishedAt.textContent = `Published At: ${article.publishedAt}`;
+
+          const link = document.createElement('a');
+          link.href = article.url;
+          link.textContent = 'Read more';
+
+          articleDiv.appendChild(title);
+          articleDiv.appendChild(description);
+          articleDiv.appendChild(source);
+          articleDiv.appendChild(publishedAt);
+          articleDiv.appendChild(link);
+
+          newsContainer.appendChild(articleDiv);
+        });
+      } else {
+        console.error('Failed to fetch news:', data.message);
+      }
+    } catch (error) {
+      console.error('Error fetching news:', error.message);
+    }
+  }
+
+  // Call fetchNews function when the page loads
+  window.onload = fetchNews;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>trusties</title>
+</head>
+<body>
+  <%= render "layouts/Vnavbar" %>
+  <section class="headlines">
+    <div class="mx-auto grid max-w-lg gap-x-8 gap-y-12 px-4 py-28 md:max-w-screen-xl md:grid-cols-2 md:px-8 lg:grid-cols-3">
+      <div>
+        <h2 class="xl:text-5xl text-4xl font-medium text-white text-center">
+          Our Trusties
+        </h2>
+      </div>
+    </div>
+  </section>
+  <section class="text-gray-600 body-font">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="flex flex-col text-center w-full mb-20">
+        <h1 class="text-2xl font-medium title-font mb-4 text-gray-900 tracking-widest">Our collaborators help turn dreams into reality.</h1>
+        <p class="lg:w-2/3 mx-auto leading-relaxed text-base">As stewards of our institution's mission and vision, your dedication and guidance are invaluable assets in steering us toward our shared goals. Your commitment to excellence and integrity inspires us all, ensuring that our organization remains steadfast in its pursuit of excellence. With your leadership, we are empowered to navigate challenges and seize opportunities, driving our institution forward with confidence and purpose. Thank you for your unwavering support and unwavering commitment to our collective success.</p>
+      </div>
+      <!-- File: app/views/trusties/index.html.erb -->
+
+<!-- File: app/views/pages/our_Trusties.html.erb -->
+
+<!-- File: app/views/pages/our_Trusties.html.erb -->
+
+<!-- File: app/views/pages/our_Trusties.html.erb -->
+
+<h1 class="text-3xl font-bold mb-4">Trusties</h1>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+  <% @trusties.each_with_index do |trusty, index| %>
+    <div class="bg-white rounded-lg shadow-md p-4">
+      <h2 class="text-xl font-semibold mb-2">Name: <%= trusty.name %></h2>
+      <p class="text-gray-600">Amount: ₹<%= trusty.amount %></p> <!-- Added ₹ symbol before amount -->
+    </div>
+  <% end %>
+</div>
+
+
+  </section>
+  <%= render "layouts/Vfooter" %>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<div id="<%= dom_id master_timetable %>">
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Subject:</strong>
+    <%= master_timetable.subject_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Teacher:</strong>
+    <%= master_timetable.teacher_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Day:</strong>
+    <%= master_timetable.day_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Time slot:</strong>
+    <%= master_timetable.time_slot_id %>
+  </p>
+
+  <p class="my-5">
+    <strong class="block font-medium mb-1">Division:</strong>
+    <%= master_timetable.division_id %>
+  </p>
+
+  <% if action_name != "show" %>
+    <%= link_to "Show this master timetable", master_timetable, class: "rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium" %>
+    <%= link_to "Edit this master timetable", edit_master_timetable_path(master_timetable), class: "rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium" %>
+    <hr class="mt-6">
+  <% end %>
+</div>

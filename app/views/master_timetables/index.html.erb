@@ -1,0 +1,165 @@
+<div class="w-full">
+  <% if notice.present? %>
+    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-lg inline-block" id="notice"><%= notice %></p>
+  <% end %>
+
+  <div class="m-5 ">
+  <nav aria-label="breadcrumb">
+    <ul class="flex flex-wrap space-x-3 text-sm font-medium">
+        <li class="flex items-center space-x-3">
+            <a href="#" class="flex items-center space-x-1 text-gray-800">
+                <svg class="h-4 w-4 shrink-0 fill-gray-500" aria-hidden="true" viewBox="0 0 256 256">
+                    <path
+                        d="M184 32H72A16 16 0 0056 48V224a8.1 8.1.0 004.1 7 7.6 7.6.0 003.9 1 7.9 7.9.0 004.2-1.2L128 193.4l59.7 37.4a8.3 8.3.0 008.2.2 8.1 8.1.0 004.1-7V48A16 16 0 00184 32z">
+                    </path>
+                </svg>
+                <%=link_to"Dashboard", maker_index_path %>
+            </a>
+        </li>
+        <li class="flex items-center space-x-3">
+            <div aria-hidden="true" class="h-4 w-px rotate-12 rounded-full bg-gray-300"></div>
+            <a href="#" class="flex items-center space-x-1 text-gray-800">
+                <svg class="h-4 w-4 shrink-0 fill-gray-500" aria-hidden="true" viewBox="0 0 256 256">
+                    <path
+                        d="M2e2 32H163.7a47.8 47.8.0 00-71.4.0H56A16 16 0 0040 48V216a16 16 0 0016 16H2e2a16 16 0 0016-16V48A16 16 0 002e2 32zm-72 0a32.1 32.1.0 0132 32H96a32.1 32.1.0 0132-32z">
+                    </path>
+                </svg>
+                <span>master_timetable</span>
+            </a>
+        </li>
+     
+    </ul>
+</nav>
+  </div>
+  <div class="flex justify-between items-center">
+
+    <h1 class="font-bold text-4xl">Master Timetables</h1>
+    <%= link_to "Add New Row", new_master_timetable_path, class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium" %>
+  </div>
+<div id="filter-form-container">
+<form class="mb-4 flex flex-wrap items-center" method="get" action="<%= master_timetables_path %>">
+<div class="flex flex-wrap space-x-4 mb-2">
+  <label for="time_slot_id" class="block font-medium">Filter by Time Slot:</label>
+  <select name="time_slot_id" id="time_slot_id" class="border rounded-md px-2 py-1">
+    <option value="">All</option>
+    <% TimeSlot.order(:start_time).each do |time_slot| %>
+      <option value="<%= time_slot.id %>" <%= 'selected' if params[:time_slot_id].to_i == time_slot.id %>>
+        <%= time_slot.start_time.strftime('%I:%M %p') %> - <%= time_slot.end_time.strftime('%I:%M %p') %>
+      </option>
+    <% end %>
+  </select>
+</div>
+
+  
+  <div class="flex flex-wrap space-x-4 mb-2">
+    <label for="subject_id" class="block font-medium">Filter by Subject:</label>
+    <select name="subject_id" id="subject_id" class="border rounded-md px-2 py-1">
+      <option value="">All</option>
+      <% Subject.all.each do |subject| %>
+        <option value="<%= subject.id %>" <%= 'selected' if params[:subject_id].to_i == subject.id %>>
+          <%= subject.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <div class="flex flex-wrap space-x-4 mb-2">
+    <label for="day_id" class="block font-medium">Filter by Day:</label>
+    <select name="day_id" id="day_id" class="border rounded-md px-2 py-1">
+      <option value="">All</option>
+      <% Day.all.each do |day| %>
+        <option value="<%= day.id %>" <%= 'selected' if params[:day_id].to_i == day.id %>>
+          <%= day.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <div class="flex flex-wrap space-x-4 mb-2">
+    <label for="teacher_id" class="block font-medium">Filter by Teacher:</label>
+    <select name="teacher_id" id="teacher_id" class="border rounded-md px-2 py-1">
+      <option value="">All</option>
+      <% Teacher.all.each do |teacher| %>
+        <option value="<%= teacher.id %>" <%= 'selected' if params[:teacher_id].to_i == teacher.id %>>
+          <%= teacher.name %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <div class="flex flex-wrap space-x-4 mb-2">
+    <label for="division_id" class="block font-medium">Filter by Division:</label>
+    <select name="division_id" id="division_id" class="border rounded-md px-2 py-1">
+      <option value="">All</option>
+      <% Division.all.each do |division| %>
+        <option value="<%= division.id %>" <%= 'selected' if params[:division_id].to_i == division.id %>>
+          <%= division.division %>
+        </option>
+      <% end %>
+    </select>
+  </div>
+
+  <button type="submit" class="rounded-lg py-2 px-4 mt-2 bg-gray-100 inline-block font-medium hover:bg-gray-200 transition duration-300 ease-in-out">Apply Filters</button>
+</form>
+</div>
+
+
+<div class="w-full">
+  <% Division.all.each do |division| %>
+    <h2 class="font-bold text-xl mt-4">Division: <%= division.division %></h2>
+    <% division_time_slots = @master_timetables.where(division_id: division.id).map(&:time_slot).uniq.sort_by(&:start_time) %>
+    <% division_time_slots.each do |time_slot| %>
+      <h3 class="font-semibold text-md mt-4">Time Slot: <%= time_slot.start_time.strftime('%I:%M %p') %> - <%= time_slot.end_time.strftime('%I:%M %p') %></h3>
+      <table class="w-full table-auto border-collapse mt-4">
+        <thead>
+          <tr>
+            <th class="border px-4 py-2">Day</th>
+            <th class="border px-4 py-2">Subject</th>
+            <th class="border px-4 py-2">Teacher</th>
+            <th class="border px-4 py-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% timetables = @master_timetables.where(division_id: division.id, time_slot_id: time_slot.id) %>
+          <% timetables.each do |master_timetable| %>
+            <tr>
+              <td class="border px-4 py-2 text-center"><%= master_timetable.day.name %></td>
+              <td class="border px-4 py-2 text-center"><%= master_timetable.subject.name %></td>
+              <td class="border px-4 py-2 text-center"><%= master_timetable.teacher.name %></td>
+              <td class="border py-2 flex flex-row justify-center">
+                <%= link_to "Show", master_timetable, class: "text-blue-500 bg-blue-100 hover:bg-blue-200 px-4 py-2 rounded-md mr-2", title: "Show details" %>
+                <%= link_to "Edit", edit_master_timetable_path(master_timetable), class: "text-yellow-500 bg-yellow-100 hover:bg-yellow-200 px-4 py-2 rounded-md mr-2", title: "Edit details" %>
+                <%= button_to "Delete", master_timetable, method: :delete, data: { confirm: "Are you sure?" }, class: "text-red-500 bg-red-100 hover:bg-red-200 px-4 py-2 rounded-md", title: "Delete record" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  <% end %>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('filter-form');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+
+      const formData = new FormData(form); // Serialize form data
+
+      // Send form data via AJAX
+      fetch(form.action, {
+        method: form.method,
+        body: formData
+      })
+      .then(response => response.text()) // Assuming the server returns HTML
+      .then(html => {
+        document.getElementById('filter-form-container').innerHTML = html; // Update content with filtered results
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+  });
+</script>
